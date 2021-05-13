@@ -1,68 +1,51 @@
-import * as axios from "axios"
-import { createAsyncThunk, createSlice  } from '@reduxjs/toolkit';
+import {createSlice  } from '@reduxjs/toolkit';
 
-const namespace ="game";
 
-//https://random-word-api.herokuapp.com/all
-export const fetchWords = createAsyncThunk(`${namespace}/fetchWords`,async (endPoint:string,thunkAPI)=>{
-    try{
-        const {data} = await axios.default.get(endPoint);
-        return data;
-    }
-    catch(error)
-    {
-        thunkAPI.rejectWithValue(error);
-    }  
-})
 
-interface wordsCollection{
-    easy:string[],
-    mid:string[],
-    hard:string[]
-} 
+const namespace='game';
 
 interface gameState {
-    wordsCollection:wordsCollection,
+    difficulty:'easy'|'medium'|'hard',
     choosenWord:string,
-    status:'idle'|'pending'|'failed'|'success',
-    error: string|null|undefined
+    modified:string,
 }
 
 const initialState:gameState ={
-    wordsCollection:{easy:[],mid:[],hard:[]},
+    difficulty:'easy',
     choosenWord:'',
-    status:'idle',
-    error: ''
+    modified:'',
 }
 export const gameSlice = createSlice({
     name:namespace,
     initialState: initialState,
     reducers:{
-        selectWord: (state,{payload})=>{
-
+        setDifficulty: (state,{payload})=>{
+            if(payload===0) state.difficulty = 'easy';
+            if(payload===1) state.difficulty = 'medium';
+            if(payload===2) state.difficulty = 'hard';
+            
+        },
+        setRandomWord: (state,{payload})=>{
+            if(state.difficulty === 'easy') 
+                state.choosenWord=payload.easy[Math.floor(Math.random()*payload.easy.length)];
+            if(state.difficulty === 'medium')
+                state.choosenWord=payload.mid[Math.floor(Math.random()*payload.mid.length)];
+            if(state.difficulty === 'hard')
+                state.choosenWord=payload.hard[Math.floor(Math.random()*payload.hard.length)];
+            state.modified=state.choosenWord;
+        },
+        setCharAt: (state,{payload})=>{
+            if(payload.index > state.modified.length-1){}
+            else {
+                state.modified=state.modified.substring(0,payload.index) + payload.chr + state.modified.substring(payload.index+1);
+            }
+            
         },
     },
-    extraReducers:(builder)=>{
-      builder.addCase(fetchWords.pending,(state,{payload})=>{
-          state.status='pending';
-    })
-      builder.addCase(fetchWords.rejected,(state,action)=>{
-        state.status='failed'
-        state.error=action.error.message;
-    })
-    builder.addCase(fetchWords.fulfilled,(state,{payload})=>{
-        payload.forEach((word:any)=>{
-            if(word.length>6 || word.length<4) {}
-            else if(word.length == 4) state.wordsCollection.easy=[...state.wordsCollection.easy,word];
-            else if(word.length == 5) state.wordsCollection.mid=[...state.wordsCollection.mid,word];
-            else if(word.length == 6) state.wordsCollection.hard=[...state.wordsCollection.hard,word];
-        })
-        state.status='success'
-    })  
-    }
+
 })
 
-export const {selectWord} =gameSlice.actions;
+export const {setRandomWord,setDifficulty,setCharAt} =gameSlice.actions;
 export default gameSlice.reducer;
 
 

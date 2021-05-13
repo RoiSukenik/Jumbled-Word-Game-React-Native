@@ -1,21 +1,37 @@
-import React,{useEffect} from 'react'
-import { ActivityIndicator,Text, View ,StyleSheet,FlatList} from 'react-native'
+import React,{useEffect,useState} from 'react'
+import { Text, View ,StyleSheet} from 'react-native'
+import { useDispatch } from 'react-redux'
+import { setCharAt, setRandomWord } from '../features/gameSlice'
 import {useAppSelector} from '../hooks/reduxHooks'
+
+
 
 function Game() {
 
-    const {wordsCollection}=useAppSelector(state=>state.gameState)
+  const dispatch = useDispatch();
 
-    return (
-    <View>
-        <FlatList
-        data={wordsCollection.easy}
-        renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
-      />
-      
-    </View>
-    )
+  const {choosenWord,modified} = useAppSelector(state=>state.gameState)
+  
+
+  
+  useEffect( ()=>{
+    for(let i=0;i<choosenWord.length;i++)
+    {
+      if(i%2 ==1)
+      {
+        dispatch(setCharAt({index:i,chr:"_"}))
+      }
+    }
+  },[])
+
+  return (
+  <View>
+
+   <Text>{modified}</Text>
+  </View>
+  )
 }
+
 const styles = StyleSheet.create({
     container:
     {

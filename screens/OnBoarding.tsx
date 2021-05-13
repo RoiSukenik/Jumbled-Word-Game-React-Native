@@ -3,7 +3,7 @@ import Onboarding from 'react-native-onboarding-swiper';
 import {Image,StyleSheet} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import ColorSchema from '../constants/Colors';
-import {fetchWords} from '../features/gameSlice';
+import {fetchWords} from '../features/dataSlice';
 import {useAppDispatch} from '../hooks/reduxHooks';
 
 
@@ -11,25 +11,29 @@ export default function OnBoarding({ navigation }:StackScreenProps<{Home: any}>)
 
     const dispatch = useAppDispatch();
     useEffect(()=>{
-        dispatch(fetchWords('https://random-word-api.herokuapp.com/all'))
+        //Could be used and set using React Native dotenv
+        dispatch(fetchWords('https://random-word-api.herokuapp.com/word?number=25000'))
     },[])
     return (
         <Onboarding
         onSkip={async()=>{navigation.navigate('Home')} }
         onDone={async ()=>{navigation.navigate('Home')} }
         imageContainerStyles={{paddingBottom:0}}
+        titleStyles={{fontFamily:"turret-road-bold"}}
+        subTitleStyles={{fontFamily:"turret-road-bold"}}
         pages={[
             {
-                backgroundColor:ColorSchema.light.background,
-                image: <Image style={styles.onBoarding1} source={require('../assets/images/Onboarding-1.gif')}/>,
-                title:'',
-                subtitle:'',
+                backgroundColor:ColorSchema.dark.background,
+                image: <Image style={styles.onBoarding1} source={require('../assets/Logos/Home-Logo.gif')}/>,
+                title:'Test Your English Knowlage!',
+                subtitle:"Find The Right Letters To Complete The Word!",
             },
             {
                 backgroundColor:ColorSchema.dark.background,
                 image: <Image style={styles.onBoarding2} source={require('../assets/images/Onboarding-2.png')}/>,
                 title:'Want To Play?',
                 subtitle:"It's easy, Just finish the missing letter and be the best!",
+                
             }
         ]}
         />
@@ -39,9 +43,8 @@ export default function OnBoarding({ navigation }:StackScreenProps<{Home: any}>)
 const styles = StyleSheet.create({
     onBoarding1:
     {
-        height:'100%',
-        width: '100%', 
-        resizeMode: "stretch"
+        width: "100%",
+        resizeMode: "contain"
     },
     onBoarding2:
     {

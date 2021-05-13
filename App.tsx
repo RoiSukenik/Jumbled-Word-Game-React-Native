@@ -14,11 +14,9 @@ import { Provider } from 'react-redux';
 
 
 
-
 export default function App() {
 
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
 
   if (!isLoadingComplete) {
     return <AppLoading/>
@@ -40,8 +38,7 @@ export default function App() {
                       title:"The Jumble Word Game",
                       headerTitleStyle:
                       {
-                        fontFamily:'girassol',
-                        fontWeight:'bold',
+                        fontFamily:"turret-road-bold",
                         textShadowColor:'rgba(255,255,255,1)',
                         textShadowRadius:  -20,
                         textShadowOffset:{width:1,height:1},  
