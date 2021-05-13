@@ -4,7 +4,7 @@ type MainStackParamList = {
     OnBoarding: undefined;
     Home:       undefined;
     Game:       undefined;
-    ScoreTable: undefined;
+    GameOver:   undefined;
 }
 
 const MainStack = createStackNavigator<MainStackParamList>();

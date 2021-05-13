@@ -4,7 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import MainStack from './navigation/MainNavigator';
-import { Game, Home, Onboarding, ScoreTable } from './screens';
+import { Game, Home, Onboarding, GameOver } from './screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import AppLoading from 'expo-app-loading';
@@ -50,7 +50,7 @@ export default function App() {
                       }
                   }}/>
                   <MainStack.Screen name={"Game"} component={Game}/>
-                <MainStack.Screen name={"ScoreTable"} component={ScoreTable}/>
+                <MainStack.Screen name={"GameOver"} component={GameOver}/>
               </MainStack.Navigator>
             </NavigationContainer>
           </PaperProvider>

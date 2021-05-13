@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ScoreTable() {
+function GameOver() {
     return (
         <div>
             
@@ -8,4 +8,4 @@ function ScoreTable() {
     )
 }
 
-export default ScoreTable
+export default GameOver
