@@ -8,12 +8,16 @@ interface gameState {
     difficulty:'easy'|'medium'|'hard',
     choosenWord:string,
     modified:string,
+    lifes:number,
+    score:number
 }
 
 const initialState:gameState ={
     difficulty:'easy',
     choosenWord:'',
     modified:'',
+    lifes:3,
+    score:0,
 }
 export const gameSlice = createSlice({
     name:namespace,
@@ -41,11 +45,17 @@ export const gameSlice = createSlice({
             }
             
         },
+        decreaseLife: (state) =>{
+            state.lifes=state.lifes-1;
+        },
+        raiseScore: (state) =>{
+            state.score=state.score+1;
+        }
     },
 
 })
 
-export const {setRandomWord,setDifficulty,setCharAt} =gameSlice.actions;
+export const {setRandomWord,setDifficulty,setCharAt,decreaseLife,raiseScore} =gameSlice.actions;
 export default gameSlice.reducer;
 
 

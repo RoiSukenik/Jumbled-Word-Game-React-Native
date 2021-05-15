@@ -10,13 +10,15 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import AppLoading from 'expo-app-loading';
 import {store} from './app/store';
 import { Provider } from 'react-redux';
-
+import {pageHeaderSchemaOptions} from './constants/Layout'
 
 
 
 export default function App() {
 
   const isLoadingComplete = useCachedResources();
+  const {headerLeft,headerStyle,headerTitleStyle} = pageHeaderSchemaOptions
+  
 
   if (!isLoadingComplete) {
     return <AppLoading/>
@@ -29,27 +31,24 @@ export default function App() {
               <NavigationContainer>
                 <MainStack.Navigator initialRouteName="OnBoarding" > 
                   <MainStack.Screen name={"OnBoarding"} component={Onboarding} options={{headerShown:false}} />
-                  <MainStack.Screen 
-                  name={"Home"}
-                  component={Home} 
+                  <MainStack.Screen name={"Home"} component={Home} 
                   options={
                     {
-                      headerLeft:()=>null,
+                      headerLeft:headerLeft,
                       title:"The Jumble Word Game",
-                      headerTitleStyle:
-                      {
-                        fontFamily:"turret-road-bold",
-                        textShadowColor:'rgba(255,255,255,1)',
-                        textShadowRadius:  -20,
-                        textShadowOffset:{width:1,height:1},  
-                      },
+                      headerTitleStyle:headerTitleStyle,
                       headerTitleAlign:"center",
-                      headerStyle:
-                      {
-                        backgroundColor:"#ff9800",
-                      }
+                      headerStyle:headerStyle,
                   }}/>
-                  <MainStack.Screen name={"Game"} component={Game}/>
+                  <MainStack.Screen name={"Game"} component={Game}
+                  options={
+                    {
+                      headerShown:false,
+                      headerTitleStyle:headerTitleStyle,
+                      headerTitleAlign:"center",
+                      headerStyle:headerStyle,
+                  }}
+                  />
                 <MainStack.Screen name={"GameOver"} component={GameOver}/>
               </MainStack.Navigator>
             </NavigationContainer>

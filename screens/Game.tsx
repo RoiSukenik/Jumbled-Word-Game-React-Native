@@ -5,17 +5,20 @@ import { setCharAt } from '../features/gameSlice'
 import {useAppSelector} from '../hooks/reduxHooks'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { StackScreenProps } from '@react-navigation/stack'
-
+import {Letter} from '../components'
+import { Headline, Subheading } from 'react-native-paper'
+import GuessForm from '../components/GuessForm'
 
 
 function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
 
   const dispatch = useDispatch();
 
-  const {choosenWord,modified} = useAppSelector(state=>state.gameState)
+  const {choosenWord,modified,score,lifes} = useAppSelector(state=>state.gameState)
   
   const [ready,setReady] = useState(false);
   const [key,setKey] = useState(0);
+
   useEffect( ()=>{
     for(let i=0;i<choosenWord.length;i++)
     {
@@ -24,7 +27,12 @@ function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
         dispatch(setCharAt({index:i,chr:"_"}))
       }
     }
-  },[])
+    setKey(key+1)
+  },[choosenWord])
+
+  useEffect(() => {
+    navigation.addListener('beforeRemove',(e)=>{e.preventDefault();})
+ }, [navigation])
 
   useEffect(() => {
 
@@ -65,9 +73,25 @@ function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
         </View>
       )
     }
-    else{
+    else if(ready && lifes>0){
       return (
         <View style={styles.container}>
+          <Headline style={styles.Heading}>
+            Guess The Missing Letters!
+          </Headline>
+          <Subheading style={styles.Subheading}>
+            Watch The Clock!
+            {'\n'}
+            Your'e Current Score is: {score}
+            {'\n'}
+            Life left: {lifes}
+            {'\n'}
+            Word To Guess: 
+            {'\n'}
+            {modified.split('').map((letter,key)=><Letter letter={letter}/>)}
+          </Subheading>
+          
+          <GuessForm/>
           <View style={styles.CountDown}>
           <CountdownCircleTimer
             key={key}
@@ -92,12 +116,16 @@ function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
         </View>
         )
     }
+    else{
+      {()=>navigation.navigate("GameOver")}
+    }
 }
 
 const styles = StyleSheet.create({
     container:
     {
-        flex:1
+        flex:1,
+        backgroundColor:"#ffc046",
     },
     LoadingCountDown:{
       alignItems:"center",
@@ -111,15 +139,32 @@ const styles = StyleSheet.create({
       marginBottom:40,
 
     },
-    item: {
-        backgroundColor: '#f9c2ff',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-      },
-      title: {
-        fontSize: 32,
-      },
+    Letter:{
+      paddingTop:20,
+      paddingBottom:20,
+      flexDirection:"row",
+      justifyContent:"center",
+    },
+    Word:{
+      flex:1,
+      flexDirection:'column',
+      justifyContent:'center',
+      alignContent:'center'
+
+    },
+    Heading:{
+      color:"#c56000",
+      textAlign:"center",
+      fontFamily:"turret-road-extra-bold",
+      marginTop: "10%",
+      marginBottom:"5%"
+    },
+    Subheading:{
+      color:"#c56000",
+      textAlign:"center",
+      fontFamily:"turret-road-bold"
+    },
+
 })
 
 export default Game
