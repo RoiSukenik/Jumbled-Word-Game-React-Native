@@ -1,0 +1,13 @@
+export const MidLevelBar = 3;
+export const HardLevelBar = 6;
+export const AmountOfLifeToDecreaseBy = 1;
+export const AmountOfLevelsToRaiseBy = 1;
+export const AmountOfScoreToRaiseBy = 1;
+export const InitialLife = 3;
+export const InitialScore = 0;
+export const InitialLevel = 0;
+export const EasyDifficulty = 0;
+export const MidDifficulty = 0;
+export const HardDifficulty = 0;
+export const ScorePerPage = 10;
+export const ILPhoneRegex = /^0\d([\d]{0,1})([-]{0,1})\d{7}$/;

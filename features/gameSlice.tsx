@@ -1,6 +1,17 @@
 import {createSlice  } from '@reduxjs/toolkit';
-
-
+import {
+    MidLevelBar,
+    HardLevelBar,
+    AmountOfLifeToDecreaseBy,
+    AmountOfLevelsToRaiseBy,
+    AmountOfScoreToRaiseBy,
+    InitialLevel,
+    InitialLife,
+    InitialScore,
+    HardDifficulty,
+    MidDifficulty,
+    EasyDifficulty} from '../constants/ConstVariables'
+import {RaiseBy,DecreaseBy} from '../constants/HelperFunctions'
 
 const namespace='game';
 
@@ -9,24 +20,26 @@ interface gameState {
     choosenWord:string,
     modified:string,
     lifes:number,
-    score:number
+    score:number,
+    level:number
 }
 
 const initialState:gameState ={
     difficulty:'easy',
     choosenWord:'',
     modified:'',
-    lifes:3,
-    score:0,
+    lifes:InitialLife,
+    score:InitialScore,
+    level:InitialLevel
 }
 export const gameSlice = createSlice({
     name:namespace,
     initialState: initialState,
     reducers:{
         setDifficulty: (state,{payload})=>{
-            if(payload===0) state.difficulty = 'easy';
-            if(payload===1) state.difficulty = 'medium';
-            if(payload===2) state.difficulty = 'hard';
+            if(payload===EasyDifficulty) state.difficulty = 'easy';
+            if(payload===MidDifficulty) state.difficulty = 'medium';
+            if(payload===HardDifficulty) state.difficulty = 'hard';
             
         },
         setRandomWord: (state,{payload})=>{
@@ -46,16 +59,25 @@ export const gameSlice = createSlice({
             
         },
         decreaseLife: (state) =>{
-            state.lifes=state.lifes-1;
+            state.lifes=DecreaseBy(state.lifes,AmountOfLifeToDecreaseBy);
         },
         raiseScore: (state) =>{
-            state.score=state.score+1;
-        }
+            state.score=RaiseBy(state.score,AmountOfScoreToRaiseBy);
+            state.level=RaiseBy(state.level,AmountOfLevelsToRaiseBy);
+            if(state.level>MidLevelBar) state.difficulty="medium";
+            if(state.level>HardLevelBar) state.difficulty="hard";
+            
+        },
     },
 
 })
 
-export const {setRandomWord,setDifficulty,setCharAt,decreaseLife,raiseScore} =gameSlice.actions;
+export const {
+    setRandomWord,
+    setDifficulty,
+    setCharAt,
+    decreaseLife,
+    raiseScore} =gameSlice.actions;
 export default gameSlice.reducer;
 
 

@@ -1,11 +1,11 @@
 import React,{useEffect,useState} from 'react'
-import { Text, View ,StyleSheet, Animated} from 'react-native'
+import {  View ,StyleSheet, Animated} from 'react-native'
 import { useDispatch } from 'react-redux'
 import { setCharAt } from '../features/gameSlice'
 import {useAppSelector} from '../hooks/reduxHooks'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { StackScreenProps } from '@react-navigation/stack'
-import {Letter} from '../components'
+import {Word} from '../components'
 import { Headline, Subheading } from 'react-native-paper'
 import GuessForm from '../components/GuessForm'
 
@@ -18,7 +18,6 @@ function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
   
   const [ready,setReady] = useState(false);
   const [key,setKey] = useState(0);
-
   useEffect( ()=>{
     for(let i=0;i<choosenWord.length;i++)
     {
@@ -29,11 +28,16 @@ function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
     }
     setKey(key+1)
   },[choosenWord])
+  useEffect(() => {
+    if(lifes ==0)
+      {
+        navigation.navigate('GameOver')
+      }
 
+  }, [lifes])
   useEffect(() => {
     navigation.addListener('beforeRemove',(e)=>{e.preventDefault();})
  }, [navigation])
-
   useEffect(() => {
 
   }, [ready])
@@ -73,7 +77,7 @@ function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
         </View>
       )
     }
-    else if(ready && lifes>0){
+    else{
       return (
         <View style={styles.container}>
           <Headline style={styles.Heading}>
@@ -88,9 +92,11 @@ function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
             {'\n'}
             Word To Guess: 
             {'\n'}
-            {modified.split('').map((letter,key)=><Letter letter={letter}/>)}
+            {choosenWord}
           </Subheading>
-          
+          <View style={styles.Word}>
+            <Word word={modified}/>
+          </View>
           <GuessForm/>
           <View style={styles.CountDown}>
           <CountdownCircleTimer
@@ -116,9 +122,6 @@ function Game({ navigation }:StackScreenProps<{GameOver: any}>) {
         </View>
         )
     }
-    else{
-      {()=>navigation.navigate("GameOver")}
-    }
 }
 
 const styles = StyleSheet.create({
@@ -138,12 +141,6 @@ const styles = StyleSheet.create({
       flexDirection:"column-reverse",
       marginBottom:40,
 
-    },
-    Letter:{
-      paddingTop:20,
-      paddingBottom:20,
-      flexDirection:"row",
-      justifyContent:"center",
     },
     Word:{
       flex:1,
@@ -168,3 +165,4 @@ const styles = StyleSheet.create({
 })
 
 export default Game
+

@@ -1,10 +1,10 @@
 import React,{useEffect,useState} from 'react';
 import {View,StyleSheet,Image} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
-import { Button, Headline, Subheading,Paragraph, Badge ,Text } from 'react-native-paper';
+import {  Headline, Subheading,Paragraph, Badge ,Text } from 'react-native-paper';
 import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
-import { ButtonGroup } from "react-native-elements";
-
+import { ButtonGroup, Button } from "react-native-elements";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setDifficulty, setRandomWord } from '../features/gameSlice';
 
 
@@ -27,7 +27,7 @@ function Home({ navigation }:StackScreenProps<{Game: any}>) {
     }
     const OnGameStart = ()=>{
         dispatch(setRandomWord(wordsCollection));
-        navigation.navigate("Game");
+        navigation.navigate('Game');
     }
         return (
             <View style={styles.continer}>
@@ -67,17 +67,23 @@ function Home({ navigation }:StackScreenProps<{Game: any}>) {
                         />
                     <View>
                         <Button 
-                        mode={"contained"} 
-                        color={"#c56000"} 
+                        type="solid"
                         onPress={OnGameStart}
-                        labelStyle={styles.StartButtonText}
-                        >
-                            Start!
-                        </Button>
+                        title="Start"
+                        titleStyle={styles.StartButtonText}
+                        buttonStyle={styles.StartButtonContainer}
+                        />
+                    </View>
+                    {/*This Button is for Dev purpose only - FIXME */}
+                    <View>
+                        <Button 
+                        type="solid"
+                        title="Reset Async Storage"
+                        onPress={()=> AsyncStorage.clear()}
+                        />
                     </View>
                 </View>
                 <View>
-                 {}
                 </View>
             </View>
         )
@@ -126,6 +132,9 @@ const styles = StyleSheet.create({
     },
     StartButtonText:{
         fontFamily:"turret-road-extra-bold"
+    },
+    StartButtonContainer:{
+        backgroundColor:"#c56000"
     },
     actualWord:{
         fontFamily:"turret-road-extra-bold",

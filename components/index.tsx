@@ -1,3 +1,4 @@
-import {default as Letter} from './Letter/Letter'
+import {default as Word} from './Word/Word'
+import {default as SaveOverlay} from './SaveScoreOverlay/SaveScoreOverlay'
 
-export {Letter}
+export {Word,SaveOverlay}

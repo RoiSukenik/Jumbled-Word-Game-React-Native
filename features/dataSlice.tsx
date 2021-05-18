@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice  } from '@reduxjs/toolkit';
 
 const namespace ="data";
 
-//https://random-word-api.herokuapp.com/all
+//In real scale app all fetching and filtering will be done server side.
 export const fetchWords = createAsyncThunk(`${namespace}/fetchWords`,async (endPoint:string,thunkAPI)=>{
     try{
         const {data} = await axios.default.get(endPoint);

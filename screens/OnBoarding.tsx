@@ -5,6 +5,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import ColorSchema from '../constants/Colors';
 import {fetchWords} from '../features/dataSlice';
 import {useAppDispatch} from '../hooks/reduxHooks';
+import { loadScoreTable } from '../features/scoreSlice';
 
 
 export default function OnBoarding({ navigation }:StackScreenProps<{Home: any}>) {
@@ -13,14 +14,15 @@ export default function OnBoarding({ navigation }:StackScreenProps<{Home: any}>)
     useEffect(()=>{
         //Could be used and set using React Native dotenv
         dispatch(fetchWords('https://random-word-api.herokuapp.com/word?number=25000'))
+        dispatch(loadScoreTable('ScoreTable'))
     },[])
     return (
         <Onboarding
-        onSkip={async()=>{navigation.navigate('Home')} }
-        onDone={async ()=>{navigation.navigate('Home')} }
+        onDone={()=>{navigation.navigate('Home')} }
         imageContainerStyles={{paddingBottom:0}}
         titleStyles={{fontFamily:"turret-road-bold"}}
         subTitleStyles={{fontFamily:"turret-road-bold"}}
+        showSkip={false}
         pages={[
             {
                 backgroundColor:ColorSchema.dark.background,
